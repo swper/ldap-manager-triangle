@@ -88,3 +88,12 @@ The first startup will automatically pull the mirror, so it will be slow.
   ```
 
   
+
+- app.conf change your domain
+
+  ```
+  server_name  Your DOMAIN;
+  ```
+
+  
+
