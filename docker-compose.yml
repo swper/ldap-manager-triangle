@@ -10,9 +10,9 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - "/data/nginx/conf/app.conf:/etc/nginx/conf.d/app.conf"
-      #- "/data/nginx/logs:/var/log/nginx"
-      #- "/data/nginx/html:/usr/share/nginx/html"
+      - "./app.conf:/etc/nginx/conf.d/app.conf"
+      #- "./logs:/var/log/nginx"
+      #- "./html:/usr/share/nginx/html"
     command: [nginx, '-g', 'daemon off;']
     networks:
       - ldap-network
