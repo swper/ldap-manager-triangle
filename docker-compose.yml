@@ -1,0 +1,50 @@
+version: '2'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    hostname: nginx
+    stdin_open: true
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - "/data/nginx/conf/app.conf:/etc/nginx/conf.d/app.conf"
+      #- "/data/nginx/logs:/var/log/nginx"
+      #- "/data/nginx/html:/usr/share/nginx/html"
+    command: [nginx, '-g', 'daemon off;']
+    networks:
+      - ldap-network
+
+  openldap:
+    image: osixia/openldap
+    container_name: openldap
+    hostname: openldap
+    stdin_open: true
+    ports:
+      - 389:389
+    networks:
+      - ldap-network
+    environment:
+      TZ: Asia/Shanghai
+      LDAP_ORGANISATION: "Your ORGANISATION"
+      LDAP_DOMAIN: "Your DOMAIN"
+      LDAP_ADMIN_PASSWORD: "Your Password"
+
+  ldap-manager:
+    image: ldapaccountmanager/lam
+    container_name: ldap-manager
+    hostname: ldap-manager
+    stdin_open: true
+    networks:
+      - ldap-network
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: openldap
+      PHPLDAPADMIN_HTTPS: 0
+    volumes:
+      - "./lam.conf:/var/lib/ldap-account-manager/config/lam.conf"
+
+networks:
+  ldap-network:
+    driver: bridge
